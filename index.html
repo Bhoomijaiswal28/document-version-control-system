@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DocuVault | Document Control</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-icon">DV</span><div><b>DOCUVAULT</b><small>DOCUMENT CONTROL</small></div></div>
+      <p class="nav-heading">WORKSPACE</p>
+      <button class="nav active" data-page="dashboard">▦ Dashboard</button>
+      <button class="nav" data-page="documents">▤ All Documents</button>
+      <button class="nav" data-page="approvals">◷ Approval Center <span id="pendingBadge">0</span></button>
+      <button class="nav" data-page="audit">☷ Audit Log</button>
+      <div class="side-footer"><span class="dot"></span> Local workspace</div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div><p class="eyebrow">DOCUMENT OPERATIONS</p><h1 id="pageTitle">Dashboard</h1></div>
+        <div class="top-right"><span class="online">● SYSTEM ONLINE</span><div class="avatar">AD</div></div>
+      </header>
+
+      <section id="dashboardPage" class="page">
+        <div class="welcome">
+          <div><p class="eyebrow">CONTROL CENTER / OVERVIEW</p><h2>Document workspace<span>.</span></h2><p class="sub">Manage, track, and control your organization's documents.</p></div>
+          <button class="btn primary" id="dashboardUpload">＋ Upload document</button>
+        </div>
+        <div class="stats">
+          <div class="stat"><p>Total documents</p><strong id="totalCount">0</strong><small>In document register</small></div>
+          <div class="stat"><p>Pending review</p><strong id="pendingCount">0</strong><small>Awaiting approval</small></div>
+          <div class="stat"><p>Approved</p><strong id="approvedCount">0</strong><small>Released documents</small></div>
+          <div class="stat"><p>Versions tracked</p><strong id="versionCount">0</strong><small>Across all documents</small></div>
+        </div>
+        <div class="section-title"><div><h3>Recent documents</h3><p>Latest updates in your register</p></div><button class="link-btn" data-open="documents">View all →</button></div>
+        <div class="table-box"><table><thead><tr><th>DOCUMENT</th><th>DOC ID</th><th>VERSION</th><th>OWNER</th><th>STATUS</th><th>UPDATED</th><th>ACTION</th></tr></thead><tbody id="recentTable"></tbody></table><p class="empty" id="recentEmpty">No documents uploaded yet.</p></div>
+      </section>
+
+      <section id="documentsPage" class="page hidden">
+        <div class="section-title"><div><h3>Document register</h3><p>All controlled documents and revisions</p></div><button class="btn primary" id="uploadButton">＋ Upload document</button></div>
+        <div class="toolbar">
+          <input id="search" type="search" placeholder="Search title, document ID, owner...">
+          <select id="statusFilter"><option value="">All statuses</option><option>Draft</option><option>Under Review</option><option>Approved</option><option>Obsolete</option></select>
+          <select id="categoryFilter"><option value="">All categories</option><option>BOM</option><option>Quotation</option><option>Technical Drawing</option><option>Installation Report</option><option>SOP</option><option>Other</option></select>
+        </div>
+        <div class="table-box"><table><thead><tr><th>DOCUMENT</th><th>DOC ID</th><th>CATEGORY</th><th>VERSION</th><th>OWNER</th><th>STATUS</th><th>UPDATED</th><th>ACTIONS</th></tr></thead><tbody id="documentTable"></tbody></table><p class="empty" id="documentEmpty">No matching documents.</p></div>
+      </section>
+
+      <section id="approvalsPage" class="page hidden">
+        <div class="section-title"><div><h3>Approval center</h3><p>Review documents awaiting approval</p></div></div>
+        <div id="approvalList" class="approval-list"></div>
+      </section>
+
+      <section id="auditPage" class="page hidden">
+        <div class="section-title"><div><h3>Audit log</h3><p>Recent actions in this workspace</p></div><button class="btn secondary" id="clearAudit">Clear log</button></div>
+        <div class="table-box"><table><thead><tr><th>ACTIVITY</th><th>DOCUMENT</th><th>USER</th><th>DATE / TIME</th></tr></thead><tbody id="auditTable"></tbody></table><p class="empty" id="auditEmpty">No activity recorded.</p></div>
+      </section>
+      <footer>DOCUVAULT <span>•</span> DOCUMENT CONTROL SYSTEM</footer>
+    </main>
+  </div>
+
+  <!-- Upload document modal -->
+  <dialog id="uploadModal">
+    <form id="uploadForm">
+      <div class="modal-heading"><div><p class="eyebrow">DOCUMENT REGISTER</p><h2>Upload document</h2></div><button type="button" class="close" id="closeUpload">×</button></div>
+      <div class="form-grid">
+        <label>Document title<input name="title" required placeholder="Project ABC - BOM"></label>
+        <label>Document ID<input name="docId" required placeholder="DOC-AV-001"></label>
+        <label>Category<select name="category"><option>BOM</option><option>Quotation</option><option>Technical Drawing</option><option>Installation Report</option><option>SOP</option><option>Other</option></select></label>
+        <label>Owner<input name="owner" required placeholder="Employee name"></label>
+        <label class="full">Change description<input name="change" placeholder="Initial upload / revision details"></label>
+        <label class="full">Document file<input name="file" type="file" required></label>
+        <label class="full">Status<select name="status"><option>Draft</option><option>Under Review</option></select></label>
+      </div>
+      <p class="hint">Prototype limit: 5 MB per file. Each new upload with the same document ID creates a new version.</p>
+      <div class="modal-actions"><button type="button" class="btn secondary" id="cancelUpload">Cancel</button><button type="submit" class="btn primary">Save document</button></div>
+    </form>
+  </dialog>
+
+  <!-- Version history modal -->
+  <dialog id="detailModal">
+    <div class="modal-heading"><div><p class="eyebrow">DOCUMENT DETAILS</p><h2 id="detailTitle">Document details</h2></div><button class="close" id="closeDetail">×</button></div>
+    <div id="detailBody"></div>
+  </dialog>
+  <input type="file" id="newVersionFile" hidden>
+  <script src="script.js"></script>
+</body>
+</html>
